@@ -1,0 +1,77 @@
+export default function Transactions({ data = [] }) {
+  if (!data.length) {
+    return (
+      <div className="card">
+        <div className="card-header">
+          <div className="card-title">Recent Transactions</div>
+          <span className="card-badge">Auto-Categorized ✦</span>
+        </div>
+        <div className="tx-list">
+          <div className="tx-item">
+            <div
+              className="tx-icon"
+              style={{ background: "rgba(0,212,170,0.1)", color: "var(--accent)" }}
+            >
+              ₹
+            </div>
+            <div className="tx-info">
+              <div className="tx-name">Client Payment — Mehta Traders</div>
+              <div className="tx-meta">
+                Mar 25, 2026 ·{" "}
+                <span style={{ color: "var(--accent)", fontWeight: 600 }}>
+                  Income
+                </span>
+              </div>
+            </div>
+            <div className="tx-amount credit">+₹45,000</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card">
+      <div className="card-header">
+        <div className="card-title">Recent Transactions</div>
+        <span className="card-badge">Auto-Categorized ✦</span>
+      </div>
+
+      <div className="tx-list">
+        {data.map((t, i) => {
+          const isCredit = t.type === "credit" || t.type === "income";
+          const amount = t.amount ?? 0;
+          return (
+            <div className="tx-item" key={i}>
+              <div
+                className="tx-icon"
+                style={{
+                  background: "rgba(0,212,170,0.1)",
+                  color: isCredit ? "var(--accent)" : "var(--danger)",
+                }}
+              >
+                {isCredit ? "₹" : "📦"}
+              </div>
+              <div className="tx-info">
+                <div className="tx-name">{t.description || "Transaction"}</div>
+                <div className="tx-meta">
+                  {t.date || "Today"} ·{" "}
+                  <span
+                    style={{
+                      color: isCredit ? "var(--accent)" : "var(--danger)",
+                    }}
+                  >
+                    {t.category || (isCredit ? "Income" : "Expense")}
+                  </span>
+                </div>
+              </div>
+              <div className={`tx-amount ${isCredit ? "credit" : "debit"}`}>
+                {isCredit ? "+" : "−"}₹{amount}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
