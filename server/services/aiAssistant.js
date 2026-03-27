@@ -121,20 +121,24 @@ const ruleInsights = (transactions, summary) => {
     if (profitMargin < 0.2) {
       insights.push({
         type: "danger",
-        emoji: "??",
+        emoji: "🔴",
         title: "Low profit margin",
         desc: `Profit margin is ${(profitMargin * 100).toFixed(
           1
-        )}%. Focus on trimming recurring costs.`,
+        )}%. Net profit is INR ${Math.round(
+          income - expense
+        )}. Reduce recurring costs to recover.`,
       });
     } else {
       insights.push({
         type: "info",
-        emoji: "??",
+        emoji: "📈",
         title: "Healthy profit margin",
         desc: `Profit margin is ${(profitMargin * 100).toFixed(
           1
-        )}%. Keep expenses controlled.`,
+        )}%. Net profit is INR ${Math.round(
+          income - expense
+        )}. Keep expenses controlled.`,
       });
     }
   }
@@ -145,22 +149,24 @@ const ruleInsights = (transactions, summary) => {
     if (top && top.value > 0.3 * expense) {
       insights.push({
         type: "warning",
-        emoji: "??",
+        emoji: "💡",
         title: `Top expense: ${top.name}`,
         desc: `${top.name} is ${Math.round(
           (top.value / expense) * 100
-        )}% of expenses. Consider optimizing.`,
+        )}% of expenses (INR ${Math.round(
+          top.value
+        )}). Review vendors and renegotiate terms.`,
       });
     }
   }
 
   insights.push({
     type: "info",
-    emoji: "?",
+    emoji: "✅",
     title: "Cash flow check",
     desc: `Avg expense per transaction is INR ${Math.round(
       expense / Math.max(1, transactions.length)
-    )}. Track large vendors closely.`,
+    )}. Track large vendors and enforce approval thresholds.`,
   });
 
   return insights.slice(0, 3);
@@ -260,8 +266,8 @@ export const generateInsights = async (transactions) => {
   const prompt = `
 You will be given business summary data. Return exactly 3 insights as JSON.
 Each item must include: type (info|warning|danger), emoji, title, desc.
-Make desc detailed and specific (include numbers or percentages).
-Keep titles under 6 words and desc under 140 characters.
+Make desc detailed and specific (include numbers or percentages, and 1 action).
+Keep titles under 6 words and desc under 160 characters.
 Business Summary: ${JSON.stringify({
     revenue: summary.revenue,
     expenses: summary.expenses,

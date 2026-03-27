@@ -26,14 +26,20 @@ export default function Sidebar({ userName, onLogout, activeView, onNavigate }) 
         >
           <span className="icon">T</span> Transactions
         </button>
-        <button className="nav-item" onClick={() => go("dashboard")}>
+        <button
+          className={`nav-item ${activeView === "cashflow" ? "active" : ""}`}
+          onClick={() => go("cashflow")}
+        >
           <span className="icon">C</span> Cash Flow
         </button>
       </div>
 
       <div className="nav-section" style={{ marginTop: 12 }}>
         <div className="nav-label">Intelligence</div>
-        <button className="nav-item" onClick={() => go("dashboard")}>
+        <button
+          className={`nav-item ${activeView === "insights" ? "active" : ""}`}
+          onClick={() => go("insights")}
+        >
           <span className="icon">AI</span> AI Insights
         </button>
         <button className="nav-item" onClick={() => go("dashboard")}>

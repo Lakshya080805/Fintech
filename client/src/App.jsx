@@ -2,6 +2,8 @@ import { useState } from "react";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import TransactionsPage from "./pages/TransactionsPage";
+import CashFlowPage from "./pages/CashFlowPage";
+import InsightsPage from "./pages/InsightsPage";
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -34,6 +36,26 @@ function App() {
   if (view === "transactions") {
     return (
       <TransactionsPage
+        onLogout={handleLogout}
+        user={user}
+        onNavigate={setView}
+      />
+    );
+  }
+
+  if (view === "cashflow") {
+    return (
+      <CashFlowPage
+        onLogout={handleLogout}
+        user={user}
+        onNavigate={setView}
+      />
+    );
+  }
+
+  if (view === "insights") {
+    return (
+      <InsightsPage
         onLogout={handleLogout}
         user={user}
         onNavigate={setView}
