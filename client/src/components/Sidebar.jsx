@@ -112,9 +112,6 @@ export default function Sidebar({ userName, onLogout, activeView, onNavigate }) 
         >
           <span className="icon">TX</span> Tax Summary
         </button>
-        <button className="nav-item" onClick={() => go("dashboard")}>
-          <span className="icon">S</span> Settings
-        </button>
         <div className="theme-toggle">
           <span>Day / Night</span>
           <button

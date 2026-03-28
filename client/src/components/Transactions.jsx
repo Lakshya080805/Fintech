@@ -60,7 +60,13 @@ export default function Transactions({ data = [], onAdd, onDelete }) {
       </div>
 
       <div className="tx-list">
-        {data.map((t, i) => {
+        {[...data]
+          .sort((a, b) => {
+            const aTime = a?.date ? Date.parse(a.date) : 0;
+            const bTime = b?.date ? Date.parse(b.date) : 0;
+            return bTime - aTime;
+          })
+          .map((t, i) => {
           const isCredit = t.type === "credit" || t.type === "income";
           const amount = t.amount ?? 0;
           return (

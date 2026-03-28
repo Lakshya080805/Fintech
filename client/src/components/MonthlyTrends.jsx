@@ -13,16 +13,17 @@ export default function MonthlyTrends({ data = [] }) {
     );
   }
 
-  const max = Math.max(
-    ...rows.map((r) => Math.max(r.income, r.expenses, r.profit)),
-    1
-  );
+  const max = Math.max(...rows.map((r) => Math.max(r.income, r.expenses)), 1);
 
   return (
     <div className="card">
       <div className="card-header">
         <div className="card-title">Monthly Trends</div>
-        <span className="card-badge">Income vs Expenses</span>
+        <div className="trend-table-head">
+          <span>Income</span>
+          <span>Expenses</span>
+          <span>Profit / Loss</span>
+        </div>
       </div>
 
       <div className="trend-list">
@@ -39,14 +40,25 @@ export default function MonthlyTrends({ data = [] }) {
                 style={{ width: `${(r.expenses / max) * 100}%` }}
               ></div>
               <div
-                className="trend-bar profit"
-                style={{ width: `${(r.profit / max) * 100}%` }}
+                className={`trend-bar ${r.profit < 0 ? "loss" : "profit"}`}
+                style={{
+                  width: `${Math.max(
+                    0,
+                    (Math.min(Math.abs(r.profit), max) / max) * 100
+                  )}%`,
+                }}
               ></div>
             </div>
             <div className="trend-values">
-              <span>₹{Math.round(r.income)}</span>
-              <span>₹{Math.round(r.expenses)}</span>
-              <span>₹{Math.round(r.profit)}</span>
+              <span>INR {Math.round(r.income)}</span>
+              <span>INR {Math.round(r.expenses)}</span>
+              {r.profit < 0 ? (
+                <span className="trend-loss">
+                  -INR {Math.abs(Math.round(r.profit))}
+                </span>
+              ) : (
+                <span>INR {Math.round(r.profit)}</span>
+              )}
             </div>
           </div>
         ))}
@@ -56,6 +68,7 @@ export default function MonthlyTrends({ data = [] }) {
         <span className="legend income">Income</span>
         <span className="legend expenses">Expenses</span>
         <span className="legend profit">Profit</span>
+        <span className="legend loss">Loss</span>
       </div>
     </div>
   );

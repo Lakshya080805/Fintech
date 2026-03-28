@@ -19,15 +19,21 @@ export default function CashFlowChart({ data = [] }) {
   const range = max - min || 1;
 
   const width = 600;
-  const height = 180;
-  const pad = 20;
+  const height = 200;
+  const plotLeft = 26;
+  const plotRight = 8;
+  const axisX = 0;
+  const padY = 26;
+  const labelPad = 16;
+  const yTicks = 4;
 
   const toX = (i) =>
-    pad + (i * (width - pad * 2)) / Math.max(points.length - 1, 1);
+    plotLeft +
+    (i * (width - plotLeft - plotRight)) / Math.max(points.length - 1, 1);
   const toY = (v) =>
-    height - pad - ((v - min) / range) * (height - pad * 2);
+    height - padY - labelPad - ((v - min) / range) * (height - padY * 2);
 
-  const path = points
+  const pathLine = points
     .map((p, i) => `${i === 0 ? "M" : "L"} ${toX(i)} ${toY(p.value)}`)
     .join(" ");
 
@@ -36,6 +42,29 @@ export default function CashFlowChart({ data = [] }) {
     x: toX(i),
     y: toY(p.value),
   }));
+
+  const formatAmount = (value) =>
+    `INR ${Math.round(value).toLocaleString("en-IN")}`;
+
+  const getLabel = (p) => {
+    if (p?.label && /\d{4}/.test(p.label)) {
+      return p.label.replace(/\s*(20\d{2})$/, (m, y) => ` '${y.slice(2)}`);
+    }
+    if (p?.date) {
+      const d = new Date(p.date);
+      if (!Number.isNaN(d.getTime())) {
+        const month = d.toLocaleString("en-US", { month: "short" });
+        const year = String(d.getFullYear()).slice(-2);
+        return `${month}'${year}`;
+      }
+    }
+    return p?.label || "";
+  };
+
+  const ticks = Array.from({ length: yTicks + 1 }, (_, i) => {
+    const v = max - (i * range) / yTicks;
+    return { value: v, y: toY(v) };
+  });
 
   return (
     <div className="card">
@@ -46,23 +75,68 @@ export default function CashFlowChart({ data = [] }) {
 
       <div className="chart-wrap">
         <svg className="chart" viewBox={`0 0 ${width} ${height}`}>
-          <path className="chart-line" d={path} />
-          {chartPoints.map((p) => (
-            <g key={p.label}>
+          <line
+            className="chart-axis"
+            x1={axisX}
+            y1={padY}
+            x2={axisX}
+            y2={height - padY}
+          />
+          <line
+            className="chart-axis"
+            x1={axisX}
+            y1={height - padY - labelPad}
+            x2={width - plotRight}
+            y2={height - padY - labelPad}
+          />
+          {ticks.map((t) => (
+            <line
+              key={`grid-${t.value}`}
+              className="chart-grid"
+              x1={axisX}
+              y1={t.y}
+              x2={width - plotRight}
+              y2={t.y}
+            />
+          ))}
+          {ticks.map((t) => (
+            <text
+              key={`y-${t.value}`}
+              className="chart-y-label"
+              x={axisX - 6}
+              y={t.y + 3}
+              textAnchor="end"
+            >
+              {formatAmount(t.value)}
+            </text>
+          ))}
+          <path className="chart-line" d={pathLine} />
+          {chartPoints.map((p, idx) => (
+            <g key={`${p.label || "p"}-${idx}`}>
+              <text
+                className="chart-point-label"
+                x={p.x}
+                y={Math.max(p.y - 10, 12)}
+                textAnchor="middle"
+              >
+                {formatAmount(p.value)}
+              </text>
               <circle className="chart-point" cx={p.x} cy={p.y} r="3.5" />
-              <title>{`${p.label}: ₹${Math.round(p.value)}`}</title>
+              <title>{`${getLabel(p)}: ${formatAmount(p.value)}`}</title>
             </g>
           ))}
+          {points.map((p, idx) => (
+            <text
+              key={`${p.label || "x"}-${idx}`}
+              className="chart-x-label"
+              x={toX(idx)}
+              y={height - 4}
+              textAnchor="middle"
+            >
+              {getLabel(p)}
+            </text>
+          ))}
         </svg>
-      </div>
-
-      <div
-        className="chart-labels"
-        style={{ gridTemplateColumns: `repeat(${points.length}, 1fr)` }}
-      >
-        {points.map((p) => (
-          <span key={p.label}>{p.label}</span>
-        ))}
       </div>
     </div>
   );

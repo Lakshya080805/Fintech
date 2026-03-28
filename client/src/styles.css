@@ -326,8 +326,9 @@ body::before {
 .pl-bar-track { display: flex; flex-direction: column; gap: 6px; }
 .pl-bar { height: 8px; border-radius: 6px; }
 .pl-bar.income { background: var(--accent); }
-.pl-bar.expenses { background: var(--danger); }
+.pl-bar.expenses { background: #f6c453; }
 .pl-bar.profit { background: var(--accent2); }
+.pl-bar.loss { background: var(--danger); }
 .pl-bar-values { display: flex; gap: 10px; justify-content: flex-end; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
 
 .tax-controls {
@@ -526,22 +527,30 @@ body::before {
 }
 
 /* Charts */
-.chart-wrap { position: relative; height: 180px; }
+.chart-wrap { position: relative; height: 200px; }
 .chart { width: 100%; height: 100%; }
 .chart-line { fill: none; stroke: var(--accent); stroke-width: 3; }
+.chart-axis { stroke: var(--border); stroke-width: 1; }
+.chart-grid { stroke: rgba(148, 163, 184, 0.25); stroke-width: 1; stroke-dasharray: 4 6; }
+.chart-point-label {
+  font-size: 10px;
+  fill: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
 .chart-point {
   fill: var(--surface);
   stroke: var(--accent);
   stroke-width: 2;
 }
-.chart-labels {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 6px;
-  margin-top: 10px;
+.chart-y-label {
   font-size: 10px;
-  color: var(--muted);
-  text-align: center;
+  fill: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+.chart-x-label {
+  font-size: 10px;
+  fill: var(--muted);
+  font-family: 'DM Mono', monospace;
 }
 
 .pie-wrap {
@@ -567,18 +576,43 @@ body::before {
 .pie-amount { font-family: 'DM Mono', monospace; color: var(--muted); }
 
 .trend-list { display: flex; flex-direction: column; gap: 12px; }
-.trend-row { display: grid; grid-template-columns: 90px 1fr 160px; gap: 10px; align-items: center; }
+.trend-row { display: grid; grid-template-columns: 90px minmax(0, 1fr) 220px; gap: 10px; align-items: center; }
 .trend-label { font-size: 12px; color: var(--muted); }
-.trend-bars { display: flex; flex-direction: column; gap: 6px; }
+.trend-bars { display: flex; flex-direction: column; gap: 6px; padding-right: 8px; }
 .trend-bar { height: 6px; border-radius: 4px; }
 .trend-bar.income { background: var(--accent); }
-.trend-bar.expenses { background: var(--danger); }
+.trend-bar.expenses { background: #f6c453; }
 .trend-bar.profit { background: var(--accent2); }
-.trend-values { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+.trend-bar.loss { background: var(--danger); }
+.trend-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 220px;
+  justify-items: end;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+.trend-table-head {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  align-items: center;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  width: 220px;
+}
+.trend-table-head span { text-align: right; }
+.trend-values span { text-align: right; }
 .trend-legend { display: flex; gap: 12px; margin-top: 10px; font-size: 11px; color: var(--muted); }
 .legend.income { color: var(--accent); }
-.legend.expenses { color: var(--danger); }
+.legend.expenses { color: #f6c453; }
 .legend.profit { color: var(--accent2); }
+.legend.loss { color: var(--danger); }
+.trend-loss { color: var(--danger); font-weight: 600; }
 
 .empty-state {
   padding: 20px;
@@ -842,6 +876,7 @@ body::before {
   top: 7px;
   box-shadow: 0 0 12px rgba(0,212,170,0.6);
 }
+
 
 .auth-right {
   display: flex;

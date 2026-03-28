@@ -110,9 +110,13 @@ export default function PLPage({ onLogout, user, onNavigate }) {
                         title={`Expenses: ${formatMoney(r.expenses)}`}
                       />
                       <div
-                        className="pl-bar profit"
-                        style={{ width: `${(Math.abs(r.profit) / maxValue) * 100}%` }}
-                        title={`Profit: ${formatMoney(r.profit)}`}
+                        className={`pl-bar ${r.profit < 0 ? "loss" : "profit"}`}
+                        style={{
+                          width: `${(Math.abs(r.profit) / maxValue) * 100}%`,
+                        }}
+                        title={`${r.profit < 0 ? "Loss" : "Profit"}: ${formatMoney(
+                          Math.abs(r.profit)
+                        )}`}
                       />
                     </div>
                     <div className="pl-bar-values">

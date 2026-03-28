@@ -71,6 +71,9 @@ export default function Login({ onLogin }) {
           <li>Realtime bank sync and auto-categorization</li>
           <li>Forecasts powered by adaptive AI models</li>
           <li>Built-in risk alerts and compliance checks</li>
+          <li>Smart variance tracking across revenue and expenses</li>
+          <li>Instant PDF exports for investors and auditors</li>
+          <li>AI assistant that explains anomalies in plain language</li>
         </ul>
       </section>
 
