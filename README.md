@@ -1,3 +1,8 @@
+<p align="center">
+  <a href="https://fin-sight-murex.vercel.app/">
+    <img src="https://img.shields.io/badge/Live%20Demo-Visit-brightgreen?style=for-the-badge" />
+  </a>
+</p>
 # FinSight
 
 AI-powered financial assistant for modern businesses. FinSight unifies cash flow intelligence, automated insights, and reporting into a clean, fast dashboard that helps teams make confident decisions.
@@ -14,7 +19,7 @@ FinSight focuses on actionable intelligence rather than raw spreadsheets. It bri
 
 - **AI Chatbot**
   - Ask plain-language questions about your finances and get instant answers.
-  - Explore drivers behind changes (e.g., ìWhy is cash flow down this month?î).
+  - Explore drivers behind changes (e.g., ‚ÄúWhy is cash flow down this month?‚Äù).
 
 - **Tax Summary**
   - Consolidated view of tax-relevant totals and breakdowns.
